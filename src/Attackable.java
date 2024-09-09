@@ -1,0 +1,3 @@
+interface Attackable {
+    void attack();
+}
