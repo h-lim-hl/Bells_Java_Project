@@ -37,15 +37,15 @@ public class Weapon implements Usable {
     @Override
     public void use() {
         double damage = (hilt.getMass() + blade.getMass()
-                * blade.getSharpness() * rarity);
+                * blade.getSharpness() * rarity)/1000;
         double reach = hilt.getLength() + blade.getLength();
         System.out.printf("%s swings for %f damage with a reach of %f",
                 name, damage, reach);
     }
 
     @Override
-    public String toString() { //TODO
-        return String.format("Weapon \"%s\":\nrarity: %d\n%s%s\n",
+    public String toString() {
+        return String.format("Weapon \"%s\":\nrarity: %d\n\n%s\n%s",
                 name, rarity, blade.toString(), hilt.toString());
     }
 

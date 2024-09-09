@@ -11,6 +11,12 @@ public class Hilt {
         material = new Material("Immaterial", Double.NaN);
     }
 
+    public Hilt(String name, Material mat, double length) {
+        this.name = name;
+        this. material = mat;
+        this.length = length;
+    }
+
     public Hilt(String name, String material, double length, double density) {
         this.name = name;
         this.material = new Material(material, density);
@@ -59,7 +65,7 @@ public class Hilt {
 
     @Override
     public String toString() {
-        return String.format("Hilt \"%s\":\nlength: %f\n%s\n",
+        return String.format("Hilt \"%s\":\nLength: %f\n%s",
                 name, length, material.toString());
     }
 
@@ -68,4 +74,12 @@ public class Hilt {
         return Objects.hash(material, name, length);
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) return true;
+        if(!(other instanceof Hilt oh)) return false;
+        return Double.compare(length, oh.length) == 0
+                && name.equals(oh.name)
+                && material.equals(oh.material);
+    }
 }

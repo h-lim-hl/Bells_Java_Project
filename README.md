@@ -15,7 +15,7 @@ requirements and cost for BGM.
 
 ## Business Requirements
 The applications need to have these features:
-1. Register raw materials and their unit cost.
+1. Register raw materials and their unit cost.g
 2. Register intermediate projects that uses only atomic materials.
 3. Register final products that may use one or more intermediate products
 and zero or more atomic materials.
