@@ -5,23 +5,23 @@ import java.util.Scanner;
 public class Main {
     private static final String INVALID_INPUT = "Invalid Input!";
 
-    public static void main (String [] args) {
+    public static void main(String[] args) {
         Scanner inScanner = new Scanner(System.in);
         ArrayList<Weapon> stock = new ArrayList<>();
         final String[] options = {
-            "Print Inventory",
-            "Print Weapon Templates",
-            "Design New Weapon Template",
-            "Edit Design Template",
-            "Add Stock",
-            "Decrease Stock",
-            "Delete Weapon Template",
-            "Test Weapon",
-            "Exit"
+                "Print Inventory",
+                "Print Weapon Templates",
+                "Design New Weapon Template",
+                "Edit Design Template",
+                "Add Stock",
+                "Decrease Stock",
+                "Delete Weapon Template",
+                "Test Weapon",
+                "Exit"
         };
 
         int userChoice = -1;
-        do{
+        do {
             printMenu(options);
             userChoice = extractInt(inScanner);
             switch (userChoice) {
@@ -42,7 +42,7 @@ public class Main {
                 case 8: // Test Weapon
                     break;
             }
-        }while(userChoice == options.length-1);
+        } while (userChoice == options.length - 1);
     }
 
     private static void printMenu(String[] options) {
@@ -54,7 +54,7 @@ public class Main {
         System.out.print("Please select an operation: ");
     }
 
-    private static boolean isValidOption (int input, String[] options) {
+    private static boolean isValidOption(int input, String[] options) {
         return -1 < input && input < options.length;
     }
 
@@ -65,12 +65,12 @@ public class Main {
             input = sc.nextLine();
         } catch (NoSuchElementException | IllegalStateException e) {
             System.out.printf(
-                "extractInt(): nextLine(): %s", e.getMessage()
+                    "extractInt(): nextLine(): %s", e.getMessage()
             );
         }
         try {
             toRet = Integer.parseInt(input);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             System.out.println(INVALID_INPUT);
         }
         return toRet;
@@ -88,7 +88,7 @@ public class Main {
         }
         try {
             toRet = Double.parseDouble(input);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             System.out.println(INVALID_INPUT);
         }
         return toRet;

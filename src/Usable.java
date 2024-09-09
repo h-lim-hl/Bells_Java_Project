@@ -1,0 +1,3 @@
+interface Usable {
+    void use();
+}

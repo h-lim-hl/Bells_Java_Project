@@ -30,17 +30,20 @@ public class Material {
         this.density = density;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return String.format("Material \"%s\":\nDensity: %f\n", name, density);
     }
 
-    @Override public int hashCode () {
+    @Override
+    public int hashCode() {
         return Objects.hash(density, name);
     }
 
-    @Override public boolean equals(Object other) {
-        if(other == this) return true;
-        if(!(other instanceof Material om)) return false;
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) return true;
+        if (!(other instanceof Material om)) return false;
         return Double.compare(density, om.density) == 0
                 && name.equals(om.name);
     }

@@ -5,7 +5,7 @@ public class Hilt {
     private String name;
     private double length;
 
-    public Hilt () {
+    public Hilt() {
         length = Double.NaN;
         name = "Unnamed Hilt";
         material = new Material("Immaterial", Double.NaN);
@@ -29,7 +29,7 @@ public class Hilt {
         return material.getDensity();
     }
 
-    public String getMaterialName () {
+    public String getMaterialName() {
         return material.getName();
     }
 
@@ -41,11 +41,11 @@ public class Hilt {
         this.length = length;
     }
 
-    public void setDensity(double density){
+    public void setDensity(double density) {
         material.setDensity(density);
     }
 
-    public void setMaterial(String material){
+    public void setMaterial(String material) {
         this.material.setName(material);
     }
 
@@ -57,12 +57,14 @@ public class Hilt {
         return material.density * length;
     }
 
-    @Override public String toString() {
-        return String.format( "Hilt \"%s\":\nlength: %f\n%s\n",
+    @Override
+    public String toString() {
+        return String.format("Hilt \"%s\":\nlength: %f\n%s\n",
                 name, length, material.toString());
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return Objects.hash(material, name, length);
     }
 

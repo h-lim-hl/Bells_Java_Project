@@ -1,11 +1,12 @@
 import java.util.Objects;
 
-public class Weapon implements Attackable{
+public class Weapon implements Usable {
     Hilt hilt;
     Blade blade;
     String name;
     int rarity;
-//    String
+
+    //    String
     public Weapon() {
         this.hilt = new Hilt();
         this.blade = new Blade();
@@ -13,7 +14,7 @@ public class Weapon implements Attackable{
         this.rarity = -1;
     }
 
-    public Weapon( String name, int rarity, Hilt hilt, Blade blade) {
+    public Weapon(String name, int rarity, Hilt hilt, Blade blade) {
         this.name = name;
         this.rarity = rarity;
         this.hilt = hilt;
@@ -28,12 +29,13 @@ public class Weapon implements Attackable{
             double bladeSharpness, double bladeDensity) {
         this.name = weaponName;
         this.rarity = rarity;
-        this.hilt = new Hilt(hiltName ,hiltMaterial, hiltLength, hiltDensity);
+        this.hilt = new Hilt(hiltName, hiltMaterial, hiltLength, hiltDensity);
         this.blade = new Blade(bladeName, bladeMaterial, bladeLength,
                 bladeSharpness, bladeDensity);
     }
 
-    @Override public void attack() {
+    @Override
+    public void use() {
         double damage = (hilt.getMass() + blade.getMass()
                 * blade.getSharpness() * rarity);
         double reach = hilt.getLength() + blade.getLength();
@@ -41,12 +43,14 @@ public class Weapon implements Attackable{
                 name, damage, reach);
     }
 
-    @Override public String toString() { //TODO
+    @Override
+    public String toString() { //TODO
         return String.format("Weapon \"%s\":\nrarity: %d\n%s%s\n",
                 name, rarity, blade.toString(), hilt.toString());
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return Objects.hash(hilt, blade, name, rarity);
     }
 
