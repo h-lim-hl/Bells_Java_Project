@@ -1,10 +1,10 @@
 import java.util.Objects;
 
 public class Blade {
-    Material material;
-    String name;
-    double length;
-    double sharpness;
+    private Material material;
+    private String name;
+    private double length;
+    private double sharpness;
 
     public Blade() {
         this.material = new Material();
@@ -13,9 +13,9 @@ public class Blade {
         this.sharpness = Double.NaN;
     }
 
-    public Blade(String name, Material mat,double length, double sharpness) {
+    public Blade(String name, Material mat, double length, double sharpness) {
         this.name = name;
-        this.material = mat;
+        this.material = new Material(mat);
         this.length = length;
         this.sharpness = sharpness;
     }
@@ -28,41 +28,33 @@ public class Blade {
         this.sharpness = sharpness;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public double getLength() {
-        return length;
-    }
+    public double getLength() { return length; }
 
-    public double getSharpness() {
-        return sharpness;
-    }
+    public double getSharpness() { return sharpness; }
 
-    public double getMass() {
-        return material.density * length;
-    }
+    public double getMass() { return material.getDensity() * length; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public double getDensity() { return material.getDensity(); }
 
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
+    public String getMaterialName() { return material.getName(); }
 
-    public void setLength(double length) {
-        this.length = length;
-    }
+    public void setName(String name) { this.name = name; }
 
-    public void setSharpness(double sharpness) {
-        this.sharpness = sharpness;
-    }
+    public void setMaterial(Material material) { this.material = material; }
+
+    public void setLength(double length) { this.length = length; }
+
+    public void setSharpness(double sharpness) { this.sharpness = sharpness; }
+
+    public void setDensity(double density) { material.setDensity(density); }
+
+    public void setMaterialName(String name) { material.setName(name); }
 
     @Override
     public String toString() {
-        return String.format("Blade \"%s\":\nLength:%f\nSharpness: %f\n%s",
+        return String.format("Blade \"%s\":\nLength: %f\nSharpness: %f\n%s",
                 name, length, sharpness, material.toString());
     }
 

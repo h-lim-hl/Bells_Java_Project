@@ -13,7 +13,7 @@ public class Hilt {
 
     public Hilt(String name, Material mat, double length) {
         this.name = name;
-        this. material = mat;
+        this.material = new Material(mat);
         this.length = length;
     }
 
@@ -51,7 +51,7 @@ public class Hilt {
         material.setDensity(density);
     }
 
-    public void setMaterial(String material) {
+    public void setHiltMaterial(String material) {
         this.material.setName(material);
     }
 
@@ -60,7 +60,7 @@ public class Hilt {
     }
 
     public double getMass() {
-        return material.density * length;
+        return material.getDensity() * length;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Hilt {
     @Override
     public boolean equals(Object other) {
         if (other == this) return true;
-        if(!(other instanceof Hilt oh)) return false;
+        if (!(other instanceof Hilt oh)) return false;
         return Double.compare(length, oh.length) == 0
                 && name.equals(oh.name)
                 && material.equals(oh.material);

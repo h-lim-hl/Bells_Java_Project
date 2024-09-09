@@ -1,8 +1,8 @@
 import java.util.Objects;
 
 public class Material {
-    protected double density;
-    protected String name;
+    private double density;
+    private String name;
 
     public Material() {
         density = Double.NaN;
@@ -14,21 +14,18 @@ public class Material {
         this.name = name;
     }
 
-    public double getDensity() {
-        return density;
+    public Material(Material other) {
+        density = other.density;
+        name = other.name;
     }
 
-    public String getName() {
-        return name;
-    }
+    public double getDensity() { return density; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getName() { return name; }
 
-    public void setDensity(double density) {
-        this.density = density;
-    }
+    public void setName(String name) { this.name = name; }
+
+    public void setDensity(double density) { this.density = density; }
 
     @Override
     public String toString() {
