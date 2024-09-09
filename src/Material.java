@@ -30,7 +30,7 @@ public class Material {
         this.density = density;
     }
 
-    public String toString() {
+    @Override public String toString() {
         return String.format("Material \"%s\":\nDensity: %f\n", name, density);
     }
 

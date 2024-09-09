@@ -57,7 +57,7 @@ public class Hilt {
         return material.density * length;
     }
 
-    public String toString() {
+    @Override public String toString() {
         return String.format( "Hilt \"%s\":\nlength: %f\n%s\n",
                 name, length, material.toString());
     }

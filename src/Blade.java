@@ -53,7 +53,7 @@ public class Blade {
         this.sharpness = sharpness;
     }
 
-    public String toString() {
+    @Override public String toString() {
         return String.format("Blade \"%s\":\nLength:%f\nSharpness: %f\n%s\n",
                 name, length, sharpness, material.toString());
     }
