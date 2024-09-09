@@ -10,6 +10,7 @@ public class Main {
     private static int randBladeCount = 0;
     private static int randHiltCount = 0;
     private static int randMatCount = 0;
+    private static int randWeaponCount = 0;
 
     public static void main(String[] args) {
         Scanner inScanner = new Scanner(System.in);
@@ -198,7 +199,12 @@ public class Main {
 
     private static void addRandomWeapon(HashMap<Weapon, Integer> inv) {
         final int MAX_INIT_STOCK = 10;
-        inv.put(new Weapon(), RNG.nextInt(MAX_INIT_STOCK)+1);
+        final int MAX_RARITY= 3;
+        inv.put(new Weapon(
+                String.format("RandomWeapon_%d", randWeaponCount++),
+                RNG.nextInt(3) + 1, getRandomHilt(getRandomMaterial()),
+                getRandomBlade(getRandomMaterial())
+                ), RNG.nextInt(MAX_INIT_STOCK)+1);
     }
 
     private static Material getRandomMaterial() {
