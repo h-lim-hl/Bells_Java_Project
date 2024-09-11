@@ -18,12 +18,12 @@ public class Main {
         Inventory stock = new Inventory();
         final String[] options = {
                 /* 1 */ "Print Inventory",
-                /* 2 */ "Print Weapon Templates",
-                /* 3 */ "Design New Weapon Template",
+                /* 2 */ "Print Templates",
+                /* 3 */ "Design New Template",
                 /* 4 */ "Edit Design Template",
                 /* 5 */ "Modify Stock",
-                /* 6 */ "Delete Weapon Template",
-                /* 7 */ "Test Weapon",
+                /* 6 */ "Remove Template",
+                /* 7 */ "Test Template(s)",
                 /* 8 */ "Add Random Weapon",
                /* n+1 */ "Exit"
         };
@@ -33,7 +33,8 @@ public class Main {
             userChoice = -1;
             printMenu(options);
             try {
-                userChoice = getInt(inScanner, "Please Enter an Operation");
+                userChoice = getInt(inScanner,
+                        "Please Enter an Operation");
             } catch (OperationCancelException e) {
                 break;
             }
@@ -42,20 +43,22 @@ public class Main {
                     printInventory(stock);
                     break;
                 case 1: // Print Weapon Templates
-                    printWeaponTemplates(stock);
+                    printTemplates(stock);
                     break;
                 case 2: // Design New Weapon Template
-                    designNewWeapon(inScanner, stock);
+                    designNewTemplate(inScanner, stock);
                     break;
                 case 3: // Edit Design Template
-                    editWeaponTemplate(inScanner, stock);
+                    editTemplate(inScanner, stock);
                     break;
                 case 4: // Modify Stock
                     modifyStock(inScanner, stock);
                     break;
                 case 5: // Delete Weapon Template
+                    deleteTemplate(inScanner, stock);
                     break;
                 case 6: // Test Weapon
+                    testStock(inScanner, stock);
                     break;
                 case 7:
                     addRandomWeapon(stock);
@@ -89,7 +92,7 @@ public class Main {
         System.out.println("==== Print Complete ====");
     }
 
-    private static void printWeaponTemplates( final Inventory inventory) {
+    private static void printTemplates(final Inventory inventory) {
         System.out.println("==== Print Weapon Templates ====");
         int count = 0;
         for(var template : inventory.keySet()) {
@@ -100,7 +103,7 @@ public class Main {
         System.out.println("==== Print Complete ====");
     }
 
-    private static void designNewWeapon(Scanner sc, Inventory inv) {
+    private static void designNewTemplate(Scanner sc, Inventory inv) {
         String weaponName,
                 hiltName, hiltMatName,
                 bladeName, bladeMatName;
@@ -142,11 +145,11 @@ public class Main {
                 bladeSharpness, bladeMatDensity
         ), 0);
         System.out.println("Operation complete!");
-        printWeaponTemplates(inv);
+        printTemplates(inv);
 
     }
 
-    private static void editWeaponTemplate(Scanner sc, Inventory inv) {
+    private static void editTemplate(Scanner sc, Inventory inv) {
         final String ABOUT_STRING = "Editing Weapon Template Aborted!";
         String weaponName;
 
@@ -271,6 +274,57 @@ public class Main {
         System.out.println("Stock Update Complete!");
     }
 
+    private static void deleteTemplate(Scanner sc, Inventory inv) {
+        System.out.println("==== Remove Template ====");
+        String input;
+        try {
+            input = getString(sc, "Enter the Template Name to remove: ");
+        } catch (OperationCancelException e) {
+            System.out.println("Template Removal Aborted!");
+            return;
+        }
+        input = input.trim();
+        Weapon toRemove;
+        try {
+            toRemove = getWeapon(input, inv);
+        } catch (NoSuchElementException e) {
+            System.out.printf("Template \"%s\" could not be found.\n" +
+                    "Operation Aborted!");
+            return;
+        }
+        inv.remove(toRemove);
+        System.out.println("Template Removed!");
+    }
+
+    private static void testStock(Scanner sc, final Inventory inv) {
+        System.out.println("==== Testing Weapon Template ====");
+        String input ="";
+        try {
+            input = getString(sc,
+                    "Please Enter Template Name to test" +
+                            "(Leave Empty for all):", true);
+        } catch (OperationCancelException e) {
+            System.out.println("Testing Weapon Template Aborted!");
+            return;
+        }
+        input = input.trim();
+        if(input.isEmpty()) {
+            for(var template : inv.keySet()) {
+                template.use();
+            }
+        } else {
+            Weapon toTest;
+            try {
+                toTest = getWeapon(input, inv);
+            } catch (NoSuchElementException e) {
+                System.out.printf("Template \"%s\" could not be found!", input);
+                return;
+            }
+            toTest.use();
+            System.out.println("Template Test Complete!");
+        }
+    }
+
     private static Weapon getWeapon(final String name, final Inventory inv)
         throws NoSuchElementException {
         for (Weapon elem : inv.keySet()) {
@@ -353,7 +407,7 @@ public class Main {
         return PRESET_MAT[RNG.nextInt(PRESET_MAT.length)];
     }
 
-    private static Blade getRandomBlade(Material mat) {
+    private static Blade getRandomBlade(final Material mat) {
         final double MAX_LENGTH = 4.0;
         final double MAX_SHARPNESS = 5.0;
         return new Blade(String.format("RandomBlade_%d", randBladeCount++),
@@ -361,7 +415,7 @@ public class Main {
                 RNG.nextDouble() * MAX_SHARPNESS);
     }
 
-    private static Hilt getRandomHilt(Material mat) {
+    private static Hilt getRandomHilt(final Material mat) {
         final double MAX_LENGTH = 1.0;
         return new Hilt(String.format("RandomHilt_%d", randHiltCount++),
                 new Material(mat), RNG.nextDouble() * MAX_LENGTH);
