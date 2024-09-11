@@ -1,14 +1,17 @@
 import java.util.*;
 
-final class Inventory extends HashMap<Weapon, Integer> {}
+final class Inventory extends HashMap<BladedWeapon, Integer> {}
 
 public class Main {
     private static final String QUIT_STRING = "q";
     private static final String INVALID_INPUT_MSG = String.format(
             "Invalid input try again!\nEnter '%s' to abort", QUIT_STRING
     );
+
+    // For pretty print
     private static final int OPERATION_PADDING = 2;
 
+    // For use in Random Weapon Generation
     private static final Random RNG = new Random(System.currentTimeMillis());
     private static int randBladeCount = 0;
     private static int randHiltCount = 0;
@@ -79,6 +82,10 @@ public class Main {
         System.out.println("Application Exiting... Goodbye!");
     }
 
+    /**
+     * Prints out main menu of the application
+     * @param options String[] of all available options.
+     */
     private static void printMenu(final String[] options) {
         System.out.println("==== Welcome to Fantasy Hephaestus's Forge ====");
         System.out.println("Available operations:");
@@ -87,17 +94,25 @@ public class Main {
         }
     }
 
+    /**
+     * prints all known templates with stock information
+     * @param inventory Inventory object that represents the shop inventory.
+     */
     private static void printInventory (final Inventory inventory) {
         System.out.println("==== Printing Inventory ===");
         inventory.forEach((key, value) -> {
             System.out.println("-------   -------");
-            System.out.println(key.toString());
+            System.out.println(key.getName());
             System.out.printf("Stock left: %d\n", value);
         });
         System.out.println("-------   -------");
         System.out.println("==== Print Complete ====");
     }
 
+    /**
+     * prints all know templates and their details
+     * @param inventory Inventory object that represent that shop inventory.
+     */
     private static void printTemplates(final Inventory inventory) {
         System.out.println("==== Print Weapon Templates ====");
         int count = 0;
@@ -109,6 +124,11 @@ public class Main {
         System.out.println("==== Print Complete ====");
     }
 
+    /**
+     * Logic for creating a new Bladed Weapon Template
+     * @param sc Scanner that is able to scan user's input.
+     * @param inv Inventory object that represents tha shop inventory.
+     */
     private static void designNewTemplate(Scanner sc, Inventory inv) {
         String weaponName,
                 hiltName, hiltMatName,
@@ -143,7 +163,7 @@ public class Main {
             System.out.println("New Weapon Template Creation Aborted!");
             return;
         }
-        inv.put(new Weapon(
+        inv.put(new BladedWeapon(
                 weaponName, weaponRarity,
                 hiltName, hiltMatName,
                 hiltLength, hiltMatDensity,
@@ -155,6 +175,11 @@ public class Main {
 
     }
 
+    /**
+     * Logic for editing an existing Bladed Weapon Template
+     * @param sc Scanner that can scan the user input.
+     * @param inv Inventory object that represents the shop inventory.
+     */
     private static void editTemplate(Scanner sc, Inventory inv) {
         final String ABOUT_STRING = "Editing Weapon Template Aborted!";
         String weaponName;
@@ -167,9 +192,9 @@ public class Main {
             return;
         }
 
-        Weapon tgtWeapon = null;
+        BladedWeapon tgtBladedWeapon = null;
         try {
-            tgtWeapon = getWeapon(weaponName, inv);
+            tgtBladedWeapon = getWeapon(weaponName, inv);
         } catch (NoSuchElementException e) {
             System.out.printf("Weapon Template \"%s\" could not be found!",
                     weaponName);
@@ -217,36 +242,41 @@ public class Main {
             return;
         }
 
-        tgtWeapon.setHiltDensity(hiltMatDensity < 0.0 ?
-                tgtWeapon.getHiltDensity() : hiltMatDensity);
-        tgtWeapon.setHiltMaterialName(
+        tgtBladedWeapon.setHiltDensity(hiltMatDensity < 0.0 ?
+                tgtBladedWeapon.getHiltDensity() : hiltMatDensity);
+        tgtBladedWeapon.setHiltMaterialName(
                 hiltMatName.isEmpty() || hiltMatName.isBlank() ?
-                tgtWeapon.getHiltMaterialName() : hiltMatName);
-        tgtWeapon.setHiltLength(hiltLength < 0.0 ?
-                tgtWeapon.getHiltLength() : hiltLength);
-        tgtWeapon.setHiltName(hiltName.isEmpty() ?
-                tgtWeapon.getHiltName() : hiltName);
+                tgtBladedWeapon.getHiltMaterialName() : hiltMatName);
+        tgtBladedWeapon.setHiltLength(hiltLength < 0.0 ?
+                tgtBladedWeapon.getHiltLength() : hiltLength);
+        tgtBladedWeapon.setHiltName(hiltName.isEmpty() ?
+                tgtBladedWeapon.getHiltName() : hiltName);
 
-        tgtWeapon.setBladeDensity(bladeMatDensity < 0.0 ?
-                tgtWeapon.getBladeDensity() : bladeMatDensity);
-        tgtWeapon.setBladeLength(bladeLength < 0.0 ?
-                tgtWeapon.getBladeLength() : bladeLength);
-        tgtWeapon.setBladeMaterialName(
+        tgtBladedWeapon.setBladeDensity(bladeMatDensity < 0.0 ?
+                tgtBladedWeapon.getBladeDensity() : bladeMatDensity);
+        tgtBladedWeapon.setBladeLength(bladeLength < 0.0 ?
+                tgtBladedWeapon.getBladeLength() : bladeLength);
+        tgtBladedWeapon.setBladeMaterialName(
                 bladeMatName.isEmpty() || bladeMatName.isBlank() ?
-                tgtWeapon.getBladeMaterialName() : bladeMatName);
-        tgtWeapon.setBladeName(bladeName.isEmpty() || bladeMatName.isBlank() ?
-                tgtWeapon.getBladeName() : bladeName);
-        tgtWeapon.setSharpness(bladeSharpness < 0.0 ?
-                tgtWeapon.getSharpness() : bladeSharpness);
+                tgtBladedWeapon.getBladeMaterialName() : bladeMatName);
+        tgtBladedWeapon.setBladeName(bladeName.isEmpty() || bladeMatName.isBlank() ?
+                tgtBladedWeapon.getBladeName() : bladeName);
+        tgtBladedWeapon.setSharpness(bladeSharpness < 0.0 ?
+                tgtBladedWeapon.getSharpness() : bladeSharpness);
 
-        tgtWeapon.setRarity(weaponRarity < 0 ?
-                tgtWeapon.getRarity() : weaponRarity);
-        tgtWeapon.setName(weaponName.isEmpty() || weaponName.isBlank() ?
-                tgtWeapon.getName() : weaponName);
+        tgtBladedWeapon.setRarity(weaponRarity < 0 ?
+                tgtBladedWeapon.getRarity() : weaponRarity);
+        tgtBladedWeapon.setName(weaponName.isEmpty() || weaponName.isBlank() ?
+                tgtBladedWeapon.getName() : weaponName);
 
         System.out.println("Edit Complete!");
     }
 
+    /**
+     * Logic to modify Shop inventory stock
+     * @param sc Scanner that can scan the user input.
+     * @param inv Inventory object that represents the shop inventory
+     */
     private static void modifyStock(Scanner sc, Inventory inv) {
         final String ABORT_STRING = "Modify Stock Aborted!";
         String weaponName;
@@ -259,9 +289,9 @@ public class Main {
             return;
         }
 
-        Weapon tgtWeapon;
+        BladedWeapon tgtBladedWeapon;
         try {
-            tgtWeapon = getWeapon(weaponName, inv);
+            tgtBladedWeapon = getWeapon(weaponName, inv);
         } catch (NoSuchElementException e) {
             System.out.printf(
                     "Template \"%s\" was not found!\n", weaponName);
@@ -276,10 +306,15 @@ public class Main {
             return;
         }
 
-        inv.put(tgtWeapon, Math.max(0, inv.get(tgtWeapon) + change)) ;
+        inv.put(tgtBladedWeapon, Math.max(0, inv.get(tgtBladedWeapon) + change)) ;
         System.out.println("Stock Update Complete!");
     }
 
+    /**
+     * Delete template Logic
+     * @param sc Scanner that can scan for user input.
+     * @param inv Inventory object that represents that shop inventory.
+     */
     private static void deleteTemplate(Scanner sc, Inventory inv) {
         System.out.println("==== Remove Template ====");
         String input;
@@ -290,7 +325,7 @@ public class Main {
             return;
         }
         input = input.trim();
-        Weapon toRemove;
+        BladedWeapon toRemove;
         try {
             toRemove = getWeapon(input, inv);
         } catch (NoSuchElementException e) {
@@ -303,6 +338,11 @@ public class Main {
         System.out.println("Template Removed!");
     }
 
+    /**
+     * Logic to allow testing the performing of one or all Templates.
+     * @param sc Scanner that can scan for user input.
+     * @param inv Inventory object that represents the shop inventory.
+     */
     private static void testStock(Scanner sc, final Inventory inv) {
         System.out.println("==== Testing Weapon Template ====");
         String input ="";
@@ -320,7 +360,7 @@ public class Main {
                 template.use();
             }
         } else {
-            Weapon toTest;
+            BladedWeapon toTest;
             try {
                 toTest = getWeapon(input, inv);
             } catch (NoSuchElementException e) {
@@ -332,9 +372,17 @@ public class Main {
         }
     }
 
-    private static Weapon getWeapon(final String name, final Inventory inv)
+    /**
+     * Logic to find the template in the shop inventory with name.
+     * @param name String of BladedWeapon Template to find
+     * @param inv Inventory object that represents the shop inventory.
+     * @return BladeWeapon with name
+     * @throws NoSuchElementException Exception is thrown if BladedWeapon object
+     * with name is not found.
+     */
+    private static BladedWeapon getWeapon(final String name, final Inventory inv)
         throws NoSuchElementException {
-        for (Weapon elem : inv.keySet()) {
+        for (BladedWeapon elem : inv.keySet()) {
             if (elem.getName().equalsIgnoreCase(name)) {
                 return elem;
             }
@@ -342,6 +390,17 @@ public class Main {
         throw new NoSuchElementException();
     }
 
+    /**
+     * Get user input with expectation of getting a String.
+     * Option to allow blank and empty.
+     * @param sc Scanner that can scan for user input.
+     * @param prompt String that contains the prompt for the user.
+     *               Colon ':' is added within function.
+     * @param allowEmpty boolean to allow empty or blank strings as valid input.
+     * @return String captured user input.
+     * @throws OperationCancelException
+     * Exception thrown if user inputs the abort code as input.
+     */
     private static String getString(Scanner sc, final String prompt,
                                     final boolean allowEmpty)
             throws OperationCancelException {
@@ -359,11 +418,29 @@ public class Main {
         }
     }
 
+    /**
+     * Get user input with the expectation of non-empty or non-blank String.
+     * @param sc Scanner that can scan for user input.
+     * @param prompt String prompt for the user.
+     *               Colon ':' is added within the function.
+     * @return String captured user input.
+     * @throws OperationCancelException
+     * Exception thrown if user inputs the abort code as input.
+     */
     private static String getString(Scanner sc, final String prompt)
             throws OperationCancelException {
         return getString(sc, prompt, false);
     }
 
+    /**
+     * Get user input with the expectation of an int.
+     * @param sc Scanner that can scan for user input.
+     * @param prompt String prompt for the user.
+     *               Colon ':' is added within the function.
+     * @return String captured user input.
+     * @throws OperationCancelException
+     * Exception thrown if user inputs the abort code as input.
+     */
     private static int getInt(Scanner sc, final String prompt)
         throws OperationCancelException {
         String input = "";
@@ -380,6 +457,15 @@ public class Main {
         }
     }
 
+    /**
+     * Get user input with the expectation of getting a double.
+     * @param sc Scanner that can scan for user input.
+     * @param prompt String prompt for the user.
+     *               Colon ':' is added within the function.
+     * @return String captured user input.
+     * @throws OperationCancelException
+     * Exception thrown if user inputs the abort code as input.
+     */
     private static double getDouble(Scanner sc, final String prompt)
         throws OperationCancelException {
         String input = "";
@@ -396,18 +482,26 @@ public class Main {
         }
     }
 
+    /**
+     * Function adds a random Bladed Weapon Template with random amount of stock
+     * @param inv Inventory object that represents the shop inventory.
+     */
     private static void addRandomWeapon(Inventory inv) {
         final int MAX_INIT_STOCK = 10;
         final int MAX_RARITY= 3;
-        Weapon newWeapon = new Weapon(
+        BladedWeapon newBladedWeapon = new BladedWeapon(
                 String.format("RandomWeapon_%d", randWeaponCount++),
                 RNG.nextInt(MAX_RARITY) + 1, getRandomHilt(getRandomMaterial()),
                 getRandomBlade(getRandomMaterial())
         );
-        inv.put(newWeapon, RNG.nextInt(MAX_INIT_STOCK)+1);
-        System.out.printf("Weapon \"%s\" added!", newWeapon.getName());
+        inv.put(newBladedWeapon, RNG.nextInt(MAX_INIT_STOCK)+1);
+        System.out.printf("Weapon \"%s\" added!", newBladedWeapon.getName());
     }
 
+    /**
+     * Function returns one of several pre-made Materials
+     * @return Material one of several stored in the function.
+     */
     private static Material getRandomMaterial() {
         final Material[] PRESET_MAT = {
                 new Material("Wood", 600),
@@ -417,6 +511,11 @@ public class Main {
         return PRESET_MAT[RNG.nextInt(PRESET_MAT.length)];
     }
 
+    /**
+     * Function generates a random blade
+     * @param mat Material the random blade should use
+     * @return Blade randomly generated that uses provided Material
+     */
     private static Blade getRandomBlade(final Material mat) {
         final double MAX_LENGTH = 4.0;
         final double MAX_SHARPNESS = 5.0;
@@ -425,6 +524,11 @@ public class Main {
                 RNG.nextDouble() * MAX_SHARPNESS);
     }
 
+    /**
+     * Function generates a random hilt
+     * @param mat Material the random hilt should use
+     * @return Hilt randomly generated that uses provided Material
+     */
     private static Hilt getRandomHilt(final Material mat) {
         final double MAX_LENGTH = 1.0;
         return new Hilt(String.format("RandomHilt_%d", randHiltCount++),
