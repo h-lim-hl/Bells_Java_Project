@@ -264,7 +264,7 @@ public class Main {
             tgtWeapon = getWeapon(weaponName, inv);
         } catch (NoSuchElementException e) {
             System.out.printf(
-                    "Weapon Name \"%s\" was not found!\n", weaponName);
+                    "Template \"%s\" was not found!\n", weaponName);
             return;
         }
 
@@ -298,6 +298,7 @@ public class Main {
                     "Operation Aborted!", input);
             return;
         }
+        System.out.printf("Removing \"%s\"...\n", toRemove.getName());
         inv.remove(toRemove);
         System.out.println("Template Removed!");
     }
@@ -323,7 +324,7 @@ public class Main {
             try {
                 toTest = getWeapon(input, inv);
             } catch (NoSuchElementException e) {
-                System.out.printf("Template \"%s\" could not be found!", input);
+                System.out.printf("Template \"%s\" could not be found!\n", input);
                 return;
             }
             toTest.use();

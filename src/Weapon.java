@@ -131,7 +131,7 @@ public class Weapon implements Usable {
         double damage = (hilt.getMass() + blade.getMass()
                 * blade.getSharpness() * rarity) / 1000;
         double reach = hilt.getLength() + blade.getLength();
-        System.out.printf("%s swings for %f damage with a reach of %f",
+        System.out.printf("%s swings for %f damage with a reach of %f\n",
                 name, damage, reach);
     }
 
