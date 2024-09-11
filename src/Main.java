@@ -295,7 +295,7 @@ public class Main {
             toRemove = getWeapon(input, inv);
         } catch (NoSuchElementException e) {
             System.out.printf("Template \"%s\" could not be found.\n" +
-                    "Operation Aborted!");
+                    "Operation Aborted!", input);
             return;
         }
         inv.remove(toRemove);
@@ -400,7 +400,7 @@ public class Main {
         final int MAX_RARITY= 3;
         Weapon newWeapon = new Weapon(
                 String.format("RandomWeapon_%d", randWeaponCount++),
-                RNG.nextInt(3) + 1, getRandomHilt(getRandomMaterial()),
+                RNG.nextInt(MAX_RARITY) + 1, getRandomHilt(getRandomMaterial()),
                 getRandomBlade(getRandomMaterial())
         );
         inv.put(newWeapon, RNG.nextInt(MAX_INIT_STOCK)+1);
