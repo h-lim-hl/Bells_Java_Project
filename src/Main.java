@@ -7,11 +7,13 @@ public class Main {
     private static final String INVALID_INPUT_MSG = String.format(
             "Invalid input try again!\nEnter '%s' to abort", QUIT_STRING
     );
+    private static final int OPERATION_PADDING = 2;
 
     private static final Random RNG = new Random(System.currentTimeMillis());
     private static int randBladeCount = 0;
     private static int randHiltCount = 0;
     private static int randWeaponCount = 0;
+
 
     public static void main(String[] args) {
         Scanner inScanner = new Scanner(System.in);
@@ -27,6 +29,10 @@ public class Main {
                 /* 8 */ "Add Random Weapon",
                /* n+1 */ "Exit"
         };
+
+        String padding = "";
+        for(int i = 0; i < OPERATION_PADDING; ++i)
+            padding = padding.concat("\n");
 
         int userChoice;
         do {
@@ -60,7 +66,7 @@ public class Main {
                 case 6: // Test Weapon
                     testStock(inScanner, stock);
                     break;
-                case 7:
+                case 7: // Add a Random Weapon
                     addRandomWeapon(stock);
                     break;
                 case 8:
@@ -68,6 +74,7 @@ public class Main {
                 default:
                     System.out.println(INVALID_INPUT_MSG);
             }
+            System.out.print(padding);
         } while (!(userChoice == options.length-1));
         System.out.println("Application Exiting... Goodbye!");
     }
@@ -78,7 +85,6 @@ public class Main {
         for (int i = 0; i < options.length; ++i) {
             System.out.printf("(%d) %s\n", i, options[i]);
         }
-        System.out.print("Please select an operation: ");
     }
 
     private static void printInventory (final Inventory inventory) {
@@ -246,7 +252,7 @@ public class Main {
         String weaponName;
         try {
             weaponName = getString(sc,
-                    "Enter the name of the weapon template" +
+                    "Enter Template Name" +
                             " to modify the stock of");
         } catch (OperationCancelException e) {
             System.out.println(ABORT_STRING);
@@ -264,13 +270,13 @@ public class Main {
 
         int change;
         try {
-            change = getInt(sc, "Enter the change amount");
+            change = getInt(sc, "Enter the amount changed");
         } catch (OperationCancelException e) {
             System.out.println(ABORT_STRING);
             return;
         }
 
-        inv.put(tgtWeapon, inv.get(tgtWeapon) - change);
+        inv.put(tgtWeapon, Math.max(0, inv.get(tgtWeapon) + change)) ;
         System.out.println("Stock Update Complete!");
     }
 
@@ -302,7 +308,7 @@ public class Main {
         try {
             input = getString(sc,
                     "Please Enter Template Name to test" +
-                            "(Leave Empty for all):", true);
+                            "(Leave Empty for all)", true);
         } catch (OperationCancelException e) {
             System.out.println("Testing Weapon Template Aborted!");
             return;
@@ -335,11 +341,6 @@ public class Main {
         throw new NoSuchElementException();
     }
 
-    private static String getString(Scanner sc, final String prompt)
-        throws OperationCancelException {
-        return getString(sc, prompt, false);
-    }
-
     private static String getString(Scanner sc, final String prompt,
                                     final boolean allowEmpty)
             throws OperationCancelException {
@@ -347,6 +348,7 @@ public class Main {
         while(true) {
             System.out.print(prompt + ": ");
             input = sc.nextLine();
+
             if(input.equalsIgnoreCase(QUIT_STRING))
                 throw new OperationCancelException();
             else if(!allowEmpty && (input.isBlank() || input.isEmpty()))
@@ -354,6 +356,11 @@ public class Main {
             else
                 return input;
         }
+    }
+
+    private static String getString(Scanner sc, final String prompt)
+            throws OperationCancelException {
+        return getString(sc, prompt, false);
     }
 
     private static int getInt(Scanner sc, final String prompt)
@@ -391,11 +398,13 @@ public class Main {
     private static void addRandomWeapon(Inventory inv) {
         final int MAX_INIT_STOCK = 10;
         final int MAX_RARITY= 3;
-        inv.put(new Weapon(
+        Weapon newWeapon = new Weapon(
                 String.format("RandomWeapon_%d", randWeaponCount++),
                 RNG.nextInt(3) + 1, getRandomHilt(getRandomMaterial()),
                 getRandomBlade(getRandomMaterial())
-                ), RNG.nextInt(MAX_INIT_STOCK)+1);
+        );
+        inv.put(newWeapon, RNG.nextInt(MAX_INIT_STOCK)+1);
+        System.out.printf("Weapon \"%s\" added!", newWeapon.getName());
     }
 
     private static Material getRandomMaterial() {
