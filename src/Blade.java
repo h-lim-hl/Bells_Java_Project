@@ -5,7 +5,14 @@ import java.util.Objects;
  * This class serves as a class that represents all blades.
  */
 public class Blade {
+    /**
+     * Minimum length in metres
+     */
     private final double MIN_LENGTH = 0.1;
+    /**
+     * Minimum rating for sharpness.
+     * Values < 1.0 reduces damage.
+     */
     private final double MIN_SHARPNESS = 1.0;
 
     private Material material;
@@ -60,6 +67,16 @@ public class Blade {
         this.material = new Material(material, density);
         this.length = Math.max(Math.abs(length), MIN_LENGTH);
         this.sharpness = Math.max(Math.abs(sharpness), MIN_SHARPNESS);
+    }
+    /**
+     * Copy Constructor for Blade Class
+     * @param other Blade to copy from
+     */
+    public Blade(final Blade other) {
+        this.name = other.name;
+        this.material = new Material(other.material);
+        this.length = other.length;
+        this.sharpness = other.sharpness;;
     }
 
     /**
@@ -116,7 +133,7 @@ public class Blade {
 
     /**
      * Setter for Blade's length
-     * @param length Double in metres to set the new length to.
+     * @param length double in metres to set the new length to.
      *               length will be Math.abs() then Math.max() with MIN_LENGTH .
      */
     public void setLength(double length) {

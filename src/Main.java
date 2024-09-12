@@ -1,8 +1,17 @@
 import java.util.*;
 
+/**
+ * Wrapper class for HashMap&#60;BladedWeapon, Integer&#62;
+ */
 final class Inventory extends HashMap<BladedWeapon, Integer> {}
 
+/**
+ * Main class created to simulate a Weapon's shop.
+ */
 public class Main {
+    /**
+     * Quit string code for user abort operation command
+     */
     private static final String QUIT_STRING = "q";
     private static final String INVALID_INPUT_MSG = String.format(
             "Invalid input try again!\nEnter '%s' to abort", QUIT_STRING
@@ -17,7 +26,16 @@ public class Main {
     private static int randHiltCount = 0;
     private static int randWeaponCount = 0;
 
-
+    /**
+     * Main Default Constructor because intellij JavaDocs thinks it is a good
+     * idea.
+     */
+    public Main () {}
+    /**
+     * Driver method to simulate a CRUD application.
+     * @param args String[] that contains all command line args given
+     *             when running this application.
+     */
     public static void main(String[] args) {
         Scanner inScanner = new Scanner(System.in);
         Inventory stock = new Inventory();

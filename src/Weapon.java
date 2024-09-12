@@ -5,7 +5,14 @@ import java.util.Objects;
  * This class serves as a base class for all specific types of weapons.
  */
 public abstract class Weapon implements Usable {
+    /**
+     * rarity the rarity rating of the weapon.
+     * Non-negative numbers only.
+     */
     protected int rarity;
+    /**
+     * name String of the Weapon
+     */
     protected String name;
 
     /**
@@ -28,6 +35,14 @@ public abstract class Weapon implements Usable {
         this.name = name.trim();
     }
 
+    /**
+     * Copy Constructor for Weapon Class
+     * @param other Weapon to copy from
+     */
+    public Weapon(final Weapon other) {
+        this.name = other.name;
+        this.rarity = other.rarity;
+    }
     /**
      * Getter for Weapon's rarity.
      * @return int that represents the rarity.

@@ -5,6 +5,9 @@ import java.util.Objects;
  * This class serves as a class that represents all hilts.
  */
 public class Hilt {
+    /**
+     * Minimum length for a hilt
+     */
     private final double MIN_LENGTH = 0.1;
 
     private Material material;
@@ -56,6 +59,15 @@ public class Hilt {
         this.length = length;
     }
 
+    /**
+     * Copy Constructor for Hilt Class
+     * @param other Hilt to copy from
+     */
+    public Hilt(final Hilt other) {
+        this.name = other.name;
+        this.length = other.length;
+        this.material = new Material(other.material);
+    }
     /**
      * Getter for Hilt name
      * @return String that is the name of the Hilt Template.
@@ -120,12 +132,12 @@ public class Hilt {
 
     /**
      * Setter for Hilt Material name
-     * @param material String that will be the new name for Hilt Material.
+     * @param name String that will be the new name for Hilt Material.
      *                 Material naming rules apply.
      * @see Material
      */
-    public void setHiltMaterial(String material) {
-        this.material.setName(material);
+    public void setHiltMaterialName(String name) {
+        this.material.setName(name);
     }
 
     /**

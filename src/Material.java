@@ -5,6 +5,9 @@ import java.util.Objects;
  * This class serves as a class that represents all material.
  */
 public class Material {
+    /**
+     * Minimum density for any Material
+     */
     private final double MIN_DENSITY = 0.001;
 
     private double density;
