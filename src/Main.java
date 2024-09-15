@@ -181,13 +181,19 @@ public class Main {
             System.out.println("New Weapon Template Creation Aborted!");
             return;
         }
-        inv.put(new BladedWeapon(
+        BladedWeapon newWeapon = new BladedWeapon(
                 weaponName, weaponRarity,
                 hiltName, hiltMatName,
                 hiltLength, hiltMatDensity,
                 bladeName, bladeMatName, bladeLength,
-                bladeSharpness, bladeMatDensity
-        ), 0);
+                bladeSharpness, bladeMatDensity);
+
+        if(inv.containsKey(newWeapon)) {
+            System.out.printf("Error! Template \"%s\" already exists!\n",
+                    newWeapon.getName());
+            return;
+        }
+        inv.put(newWeapon, 0);
         System.out.println("Operation complete!");
         printTemplates(inv);
 
@@ -203,6 +209,7 @@ public class Main {
         String weaponName;
 
         System.out.println("==== Editing Weapon Template ====");
+        printTemplates(inv);
         try {
             weaponName = getString(sc, "Enter the name of the template to edit");
         } catch (OperationCancelException e) {
@@ -260,33 +267,46 @@ public class Main {
             return;
         }
 
-        tgtBladedWeapon.setHiltDensity(hiltMatDensity < 0.0 ?
-                tgtBladedWeapon.getHiltDensity() : hiltMatDensity);
-        tgtBladedWeapon.setHiltMaterialName(
+        Hilt newHilt = new Hilt(
+                hiltName.isEmpty() ?
+                        tgtBladedWeapon.getHiltName() : hiltName,
                 hiltMatName.isEmpty() || hiltMatName.isBlank() ?
-                tgtBladedWeapon.getHiltMaterialName() : hiltMatName);
-        tgtBladedWeapon.setHiltLength(hiltLength < 0.0 ?
-                tgtBladedWeapon.getHiltLength() : hiltLength);
-        tgtBladedWeapon.setHiltName(hiltName.isEmpty() ?
-                tgtBladedWeapon.getHiltName() : hiltName);
+                        tgtBladedWeapon.getHiltMaterialName() : hiltMatName,
+                hiltLength < 0.0 ?
+                        tgtBladedWeapon.getHiltLength() : hiltLength,
+                hiltMatDensity < 0.0 ?
+                        tgtBladedWeapon.getHiltDensity() : hiltMatDensity
+        );
 
-        tgtBladedWeapon.setBladeDensity(bladeMatDensity < 0.0 ?
-                tgtBladedWeapon.getBladeDensity() : bladeMatDensity);
-        tgtBladedWeapon.setBladeLength(bladeLength < 0.0 ?
-                tgtBladedWeapon.getBladeLength() : bladeLength);
-        tgtBladedWeapon.setBladeMaterialName(
+        Blade newBlade = new Blade(
+                bladeName.isEmpty() || bladeMatName.isBlank() ?
+                        tgtBladedWeapon.getBladeName() : bladeName,
                 bladeMatName.isEmpty() || bladeMatName.isBlank() ?
-                tgtBladedWeapon.getBladeMaterialName() : bladeMatName);
-        tgtBladedWeapon.setBladeName(bladeName.isEmpty() || bladeMatName.isBlank() ?
-                tgtBladedWeapon.getBladeName() : bladeName);
-        tgtBladedWeapon.setSharpness(bladeSharpness < 0.0 ?
-                tgtBladedWeapon.getSharpness() : bladeSharpness);
+                        tgtBladedWeapon.getBladeMaterialName() : bladeMatName,
+                bladeLength < 0.0 ?
+                        tgtBladedWeapon.getBladeLength() : bladeLength,
+                bladeSharpness < 0.0 ?
+                        tgtBladedWeapon.getSharpness() : bladeSharpness,
+                bladeMatDensity < 0.0 ?
+                        tgtBladedWeapon.getBladeDensity() : bladeMatDensity
+        );
 
-        tgtBladedWeapon.setRarity(weaponRarity < 0 ?
-                tgtBladedWeapon.getRarity() : weaponRarity);
-        tgtBladedWeapon.setName(weaponName.isEmpty() || weaponName.isBlank() ?
-                tgtBladedWeapon.getName() : weaponName);
+        BladedWeapon newWeapon = new BladedWeapon(
+                weaponName.isEmpty() || weaponName.isBlank() ?
+                tgtBladedWeapon.getName() : weaponName,
+                weaponRarity < 0 ?
+                        tgtBladedWeapon.getRarity() : weaponRarity,
+                newHilt, newBlade
+        );
 
+        if(inv.containsKey(newWeapon)) {
+            System.out.printf("Error! Template \"%s\" already exists!\n",
+                    newWeapon.getName());
+            return;
+        }
+
+        inv.put(newWeapon, inv.get(tgtBladedWeapon));
+        inv.remove(tgtBladedWeapon);
         System.out.println("Edit Complete!");
     }
 
@@ -323,8 +343,18 @@ public class Main {
             System.out.println(ABORT_STRING);
             return;
         }
+        System.out.println(change);
 
-        inv.put(tgtBladedWeapon, Math.max(0, inv.get(tgtBladedWeapon) + change)) ;
+        if(inv.get(tgtBladedWeapon) == null)  {
+            System.out.printf("Inventory does not contain %s!\n",
+                    weaponName);
+            System.out.println("printing keys");
+            inv.keySet().forEach((elem) -> {
+                System.out.println(elem.toString());
+            });
+            return;
+        }
+        inv.put(tgtBladedWeapon, Math.max(0, inv.get(tgtBladedWeapon) + change));
         System.out.println("Stock Update Complete!");
     }
 
@@ -402,7 +432,7 @@ public class Main {
         throws NoSuchElementException {
         for (BladedWeapon elem : inv.keySet()) {
             if (elem.getName().equalsIgnoreCase(name)) {
-                return elem;
+                return new BladedWeapon(elem);
             }
         }
         throw new NoSuchElementException();

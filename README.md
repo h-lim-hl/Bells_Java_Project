@@ -35,6 +35,6 @@ one or more parameters. ✅
 
 ### Submission
 - The project must be hosted on a Github repository and the link must be
-submitted via the LMS.
+submitted via the LMS. ✅
 - A zip file of all the source code and assets required to deploy the project must
 be submitted via the LMS.

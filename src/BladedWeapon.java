@@ -32,6 +32,8 @@ public class BladedWeapon extends Weapon {
      */
     public BladedWeapon(String name, int rarity, Hilt hilt, Blade blade) {
         super(rarity, name);
+        this.name = name;
+        this.rarity = rarity;
         this.hilt = new Hilt(hilt);
         this.blade = new Blade(blade);
     }
@@ -82,6 +84,8 @@ public class BladedWeapon extends Weapon {
      * @param other BladedWeapon to copy from
      */
     public BladedWeapon(final BladedWeapon other) {
+        name = other.name;
+        rarity = other.rarity;
         this.hilt = new Hilt(other.hilt);
         this.blade = new Blade(other.blade);
     }
